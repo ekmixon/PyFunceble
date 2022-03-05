@@ -108,8 +108,6 @@ class RequestHTTPAdapter(RequestAdapterBase):
             # not work.
             request.headers["Host"] = parsed_url.hostname
             kwargs["proxies"] = self.fetch_proxy_from_pattern(parsed_url.hostname)
-
-            raise Exception(kwargs)
         else:
             self.poolmanager.connection_pool_kw.pop(
                 "server_hostname", PyFunceble.storage.NOT_RESOLVED_STD_HOSTNAME
