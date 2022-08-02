@@ -84,12 +84,7 @@ class Wildcard2Subject(ConverterBase):
         Provides the converted data.
         """
 
-        subject = self.data_to_convert.strip()
-
-        if not subject:
+        if subject := self.data_to_convert.strip():
+            return subject[2:] if subject.startswith(self.WILDCARD) else subject
+        else:
             return None
-
-        if subject.startswith(self.WILDCARD):
-            return subject[2:]
-
-        return subject

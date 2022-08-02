@@ -207,25 +207,19 @@ class IanaDBGenerator:
         if iana_record and "refer" in iana_record:
             regex_referrer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
 
-            matched = RegexHelper(regex_referrer).match(
+            if matched := RegexHelper(regex_referrer).match(
                 iana_record, return_match=True, group=1
-            )
-
-            if matched:
+            ):
                 return matched
 
         possible_server = f"whois.nic.{extension}"
-        response = whois_query_tool.set_server(possible_server).record
-
-        if response:
+        if response := whois_query_tool.set_server(possible_server).record:
             return possible_server
 
         if extension in self.MANUAL_SERVER:
             possible_server = self.MANUAL_SERVER[extension]
 
-            response = whois_query_tool.set_server(possible_server).record
-
-            if response:
+            if response := whois_query_tool.set_server(possible_server).record:
                 return possible_server
 
         return None
@@ -249,9 +243,7 @@ class IanaDBGenerator:
         regex_helper = RegexHelper(regex_valid_extension)
 
         if regex_helper.match(block, return_match=False):
-            extension = regex_helper.match(block, return_match=True, group=2)
-
-            if extension:
+            if extension := regex_helper.match(block, return_match=True, group=2):
                 return extension, self.get_referrer_from_extension(extension)
 
         return None, None

@@ -148,7 +148,7 @@ class ReputationCheckerBase(CheckerBase):
         Checks if we are allowed to continue a standard testing.
         """
 
-        return bool(
+        return (
             not self.status.status
             or status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
         )

@@ -172,8 +172,8 @@ class TestRPZPolicy2Subject(unittest.TestCase):
         ip marker.
         """
 
+        marker = ".rpz-client-ip"
         for given_ip in pyf_test_dataset.VALID_IPV4:
-            marker = ".rpz-client-ip"
             given = f"{pyf_test_helpers.convert_ipv4_to_rpz(given_ip)}{marker}"
 
             expected = given_ip
@@ -188,8 +188,8 @@ class TestRPZPolicy2Subject(unittest.TestCase):
         ip marker.
         """
 
+        marker = ".rpz-client-ips"
         for given_ip in pyf_test_dataset.VALID_IPV6:
-            marker = ".rpz-client-ips"
             given = f"{pyf_test_helpers.convert_ipv6_to_rpz(given_ip)}{marker}"
 
             expected = given_ip

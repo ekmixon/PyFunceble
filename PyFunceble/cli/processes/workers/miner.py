@@ -101,9 +101,11 @@ class MinerWorker(WorkerBase):
         try:
             req = PyFunceble.factory.Requester.get(subject, allow_redirects=True)
 
-            for element in req.history:
-                if "location" in element.headers:
-                    result.append(element.headers["location"])
+            result.extend(
+                element.headers["location"]
+                for element in req.history
+                if "location" in element.headers
+            )
 
             result.extend([x for x in req.history if isinstance(x, str)])
         except (

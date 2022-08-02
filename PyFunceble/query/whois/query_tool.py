@@ -355,16 +355,12 @@ class WhoisQueryTool:
     @ensure_subject_is_given
     def get_whois_server(
         self,
-    ) -> Optional[str]:  # pragma: no cover ## Test the underlying method instead.
+    ) -> Optional[str]:    # pragma: no cover ## Test the underlying method instead.
         """
         Provides the whois server to work with.
         """
 
-        if self.subject.endswith("."):
-            extension = self.subject[:-1]
-        else:
-            extension = self.subject
-
+        extension = self.subject[:-1] if self.subject.endswith(".") else self.subject
         extension = extension[extension.rfind(".") + 1 :]
 
         return self.iana_dataset.get_whois_server(extension)
@@ -382,7 +378,7 @@ class WhoisQueryTool:
     @update_lookup_record
     def query(
         self,
-    ) -> str:  # pragma: no cover ## The effect of the response of this method
+    ) -> str:    # pragma: no cover ## The effect of the response of this method
         ## are more important.
         """
         Queries the WHOIS record and return the current object.
@@ -390,12 +386,7 @@ class WhoisQueryTool:
 
         if self.lookup_record.record is None:
 
-            if not self.server:
-                whois_server = self.get_whois_server()
-            else:
-                whois_server = self.server
-
-            if whois_server:
+            if whois_server := self.server or self.get_whois_server():
                 self.lookup_record.server = whois_server
                 self.lookup_record.query_timeout = self.query_timeout
 

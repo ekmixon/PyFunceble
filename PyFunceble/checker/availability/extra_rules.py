@@ -346,10 +346,10 @@ class ExtraRulesHandler:
 
         if (
             not self.status.status_after_extra_rules
-            and self.status.status_before_extra_rules in PyFunceble.storage.STATUS.down
-        ):
-            if self.status.ipv4_range_syntax or self.status.ipv6_range_syntax:
-                self.__switch_to_up()
+            and self.status.status_before_extra_rules
+            in PyFunceble.storage.STATUS.down
+        ) and (self.status.ipv4_range_syntax or self.status.ipv6_range_syntax):
+            self.__switch_to_up()
 
         if self.status.status_after_extra_rules:
             self.status.status = self.status.status_after_extra_rules

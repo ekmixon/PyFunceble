@@ -114,19 +114,17 @@ def profile_memory(stats_mode: str = "lineno", top_limit: int = 10):
     )
     top_stats = snapshot.statistics(stats_mode)
 
-    print("Top %s lines" % top_limit)
+    print(f"Top {top_limit} lines")
     for index, stat in enumerate(top_stats[:top_limit], 1):
         frame = stat.traceback[0]
         print(
             "#%s: %s:%s: %.1f KiB"
             % (index, frame.filename, frame.lineno, stat.size / 1024)
         )
-        line = linecache.getline(frame.filename, frame.lineno).strip()
-        if line:
-            print("    %s" % line)
+        if line := linecache.getline(frame.filename, frame.lineno).strip():
+            print(f"    {line}")
 
-    other = top_stats[top_limit:]
-    if other:
+    if other := top_stats[top_limit:]:
         size = sum(stat.size for stat in other)
         print("%s other: %.1f KiB" % (len(other), size / 1024))
     total = sum(stat.size for stat in top_stats)

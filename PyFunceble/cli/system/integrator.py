@@ -145,11 +145,7 @@ class SystemIntegrator(SystemBase):
                 if lookup_key in {"timeout"}:
                     continue
 
-                if lookup_key not in reserved_lookup_mode:
-                    to_update[f"lookup.{lookup_key}"] = False
-                else:
-                    to_update[f"lookup.{lookup_key}"] = True
-
+                to_update[f"lookup.{lookup_key}"] = lookup_key in reserved_lookup_mode
         dict_helper.set_subject(to_update)
         unflatten_to_update = dict_helper.unflatten()
 

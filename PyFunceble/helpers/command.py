@@ -105,10 +105,7 @@ class CommandHelper:
                 f"<value> should be {str} or {list}, " f"{type(value)} given."
             )
 
-        if isinstance(value, list):
-            self._command = " ".join(value)
-        else:
-            self._command = value
+        self._command = " ".join(value) if isinstance(value, list) else value
 
     def set_command(self, value: Union[str, list]) -> "CommandHelper":
         """
@@ -169,10 +166,7 @@ class CommandHelper:
         :rtype: str
         """
 
-        if to_decode:
-            return to_decode.decode(self.encoding)
-
-        return ""
+        return to_decode.decode(self.encoding) if to_decode else ""
 
     def execute(self, *, raise_on_error: bool = False) -> str:
         """

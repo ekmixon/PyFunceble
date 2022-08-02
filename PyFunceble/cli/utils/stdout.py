@@ -83,13 +83,14 @@ def print_single_line(value: str = ".", end: str = "", *, force: bool = False) -
         Forces the printing.
     """
 
-    if PyFunceble.facility.ConfigLoader.is_already_loaded():
-        if (
+    if PyFunceble.facility.ConfigLoader.is_already_loaded() and (
+        (
             force
             or PyFunceble.storage.CONFIGURATION.cli_testing.ci.active
             or PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots
-        ):
-            print(value, end=end)
+        )
+    ):
+        print(value, end=end)
 
 
 def print_thanks() -> None:
@@ -97,45 +98,46 @@ def print_thanks() -> None:
     Randomly prints our thanks message.
     """
 
-    if PyFunceble.facility.ConfigLoader.is_already_loaded():
-        if (
-            not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
-            and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.simple
-        ):
+    if not PyFunceble.facility.ConfigLoader.is_already_loaded():
+        return
+    if (
+        not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+        and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.simple
+    ):
+        if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
+            print(
+                f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                f"Thank you for using PyFunceble!{colorama.Style.RESET_ALL}"
+            )
+        else:
+            print("\nThank you for using PyFunceble!")
+
+        if int(secrets.token_hex(8), 16) % 3 == 0:
             if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
                 print(
-                    f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                    f"Thank you for using PyFunceble!{colorama.Style.RESET_ALL}"
+                    f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
+                    f"Share your experience on {colorama.Fore.CYAN}Twitter "
+                    f"{colorama.Fore.YELLOW}with {colorama.Fore.CYAN}"
+                    f"#PyFunceble{colorama.Fore.YELLOW} "
+                    f"or {colorama.Fore.CYAN}@PyFunceble"
+                    f"{colorama.Fore.YELLOW}!"
                 )
             else:
-                print("\nThank you for using PyFunceble!")
+                print(
+                    "Share your experience on Twitter with #PyFunceble or "
+                    "@PyFunceble!"
+                )
 
-            if int(secrets.token_hex(8), 16) % 3 == 0:
-                if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
-                    print(
-                        f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
-                        f"Share your experience on {colorama.Fore.CYAN}Twitter "
-                        f"{colorama.Fore.YELLOW}with {colorama.Fore.CYAN}"
-                        f"#PyFunceble{colorama.Fore.YELLOW} "
-                        f"or {colorama.Fore.CYAN}@PyFunceble"
-                        f"{colorama.Fore.YELLOW}!"
-                    )
-                else:
-                    print(
-                        "Share your experience on Twitter with #PyFunceble or "
-                        "@PyFunceble!"
-                    )
-
-            if int(secrets.token_hex(8), 16) % 3 == 0:
-                if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
-                    print(
-                        f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
-                        f"Do you have a feedback, an issue or an improvement idea? "
-                        f"{colorama.Fore.YELLOW}Let us know on {colorama.Fore.CYAN}"
-                        f"GitHub{colorama.Fore.YELLOW}!"
-                    )
-                else:
-                    print(
-                        "Do you ave a feedback, an issue or an improvement idea? "
-                        "Let us know on GitHub!"
-                    )
+        if int(secrets.token_hex(8), 16) % 3 == 0:
+            if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
+                print(
+                    f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
+                    f"Do you have a feedback, an issue or an improvement idea? "
+                    f"{colorama.Fore.YELLOW}Let us know on {colorama.Fore.CYAN}"
+                    f"GitHub{colorama.Fore.YELLOW}!"
+                )
+            else:
+                print(
+                    "Do you ave a feedback, an issue or an improvement idea? "
+                    "Let us know on GitHub!"
+                )

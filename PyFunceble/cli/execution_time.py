@@ -129,14 +129,12 @@ class ExecutionTime:
 
         difference = end.timestamp() - start.timestamp()
 
-        result = {}
-
-        result["days"] = difference // (24 * 60 * 60)
-        result["hours"] = (difference // (60 * 60)) % 24
-        result["minutes"] = (difference % 3600) // 60
-        result["seconds"] = difference % 60
-
-        return result
+        return {
+            "days": difference // (24 * 60 * 60),
+            "hours": difference // (60 * 60) % 24,
+            "minutes": difference % 3600 // 60,
+            "seconds": difference % 60,
+        }
 
     @property
     def authorized(self) -> Optional[bool]:

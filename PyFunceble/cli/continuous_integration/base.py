@@ -807,11 +807,9 @@ class ContinuousIntegrationBase:
             if "(fetch)" in x
         ][0]
 
-        filtered = RegexHelper(regex).match(
+        if filtered := RegexHelper(regex).match(
             remote_of_interest, return_match=True, group=1
-        )
-
-        if filtered:
+        ):
             if "@" in filtered:
                 return filtered[filtered.find("@") + 1 :]
             if "//" in filtered:
@@ -924,9 +922,11 @@ class ContinuousIntegrationBase:
         Tries to guess and set the command to execute.
         """
 
-        if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.cli_testing.ci.command:
-                self.command = PyFunceble.storage.CONFIGURATION.cli_testing.ci.command
+        if (
+            PyFunceble.facility.ConfigLoader.is_already_loaded()
+            and PyFunceble.storage.CONFIGURATION.cli_testing.ci.command
+        ):
+            self.command = PyFunceble.storage.CONFIGURATION.cli_testing.ci.command
 
         return self
 
@@ -935,11 +935,13 @@ class ContinuousIntegrationBase:
         Tries to guess and set the command to execute at the very end.
         """
 
-        if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_command:
-                self.end_command = (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_command
-                )
+        if (
+            PyFunceble.facility.ConfigLoader.is_already_loaded()
+            and PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_command
+        ):
+            self.end_command = (
+                PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_command
+            )
 
         return self
 
@@ -949,12 +951,11 @@ class ContinuousIntegrationBase:
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.cli_testing.ci.commit_message:
-                self.commit_message = (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.ci.commit_message
-                )
-            else:
-                self.commit_message = self.STD_COMMIT_MESSAGE
+            self.commit_message = (
+                PyFunceble.storage.CONFIGURATION.cli_testing.ci.commit_message
+                or self.STD_COMMIT_MESSAGE
+            )
+
         else:
             self.commit_message = self.STD_COMMIT_MESSAGE
 
@@ -966,12 +967,11 @@ class ContinuousIntegrationBase:
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_commit_message:
-                self.end_commit_message = (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_commit_message
-                )
-            else:
-                self.end_commit_message = self.STD_END_COMMIT_MESSAGE
+            self.end_commit_message = (
+                PyFunceble.storage.CONFIGURATION.cli_testing.ci.end_commit_message
+                or self.STD_END_COMMIT_MESSAGE
+            )
+
         else:
             self.end_commit_message = self.STD_END_COMMIT_MESSAGE
 
@@ -1189,10 +1189,7 @@ class ContinuousIntegrationBase:
             "Finished to prepare and apply final GIT commit."
         )
 
-        if self.git_distribution_branch != self.git_branch:
-            self.push_changes(branch_to_use)
-        else:
-            self.push_changes(branch_to_use)
+        self.push_changes(branch_to_use)
 
     @execute_if_authorized(None)
     def apply_commit(self) -> None:

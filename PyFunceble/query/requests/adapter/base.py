@@ -140,9 +140,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
 
         extension = subject[last_point + 1 :]
 
-        if extension.endswith("."):
-            return extension[:-1]
-        return extension
+        return extension[:-1] if extension.endswith(".") else extension
 
     def fetch_proxy_from_pattern(self, subject: str) -> dict:
         """
@@ -284,9 +282,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         else:
             result.add(hostname)
 
-        if result:
-            return result.pop()
-        return None
+        return result.pop() if result else None
 
     def resolve(self, hostname: str) -> Optional[str]:
         """

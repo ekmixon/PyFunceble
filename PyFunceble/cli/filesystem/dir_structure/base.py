@@ -82,11 +82,7 @@ class DirectoryStructureBase(FilesystemDirBase):
         ) as file_path:
             self.std_source_file = str(file_path)
 
-        if source_file is not None:
-            self.source_file = source_file
-        else:
-            self.source_file = self.std_source_file
-
+        self.source_file = self.std_source_file if source_file is None else source_file
         super().__init__(parent_dirname=parent_dirname)
 
     @property

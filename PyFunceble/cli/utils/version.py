@@ -278,21 +278,19 @@ def handle_messages(upstream_version: Box) -> None:
     """
 
     version_utility = VersionUtility(PyFunceble.storage.PROJECT_VERSION)
-    iso_dateformat = "%Y-%m-%dT%H:%M:%S%z"
-
     if PyFunceble.facility.ConfigLoader.is_already_loaded():
-        if (
-            PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
-            or PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.simple
-        ):
-            authorized = False
-        else:
-            authorized = True
+        authorized = (
+            not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+            and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.simple
+        )
+
     else:
         authorized = True
 
     if authorized:
         local_timezone = datetime.utcnow().astimezone().tzinfo
+
+        iso_dateformat = "%Y-%m-%dT%H:%M:%S%z"
 
         for minimal_version, data in upstream_version.messages.items():
             if not version_utility.is_equal_to(

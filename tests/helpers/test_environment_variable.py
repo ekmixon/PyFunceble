@@ -102,8 +102,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         given = self.test_name
         expected = given
 
-        self.helper.set_name(given)
-
+        self.helper.set_name(expected)
         actual = self.helper.name
 
         self.assertEqual(expected, actual)
@@ -154,8 +153,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         given = self.temp_env_file.name
         expected = given
 
-        self.helper.set_env_file_path(given)
-
+        self.helper.set_env_file_path(expected)
         actual = self.helper.env_file_path
 
         self.assertEqual(expected, actual)

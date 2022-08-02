@@ -116,7 +116,9 @@ def get_best_sorting_key() -> Callable[[Any], List[Union[int, Any]]]:
     Provides the best sorting key from the configuration.
     """
 
-    if PyFunceble.facility.ConfigLoader.is_already_loaded():
-        if PyFunceble.storage.CONFIGURATION.cli_testing.sorting_mode.hierarchical:
-            return hierarchical
+    if (
+        PyFunceble.facility.ConfigLoader.is_already_loaded()
+        and PyFunceble.storage.CONFIGURATION.cli_testing.sorting_mode.hierarchical
+    ):
+        return hierarchical
     return standard

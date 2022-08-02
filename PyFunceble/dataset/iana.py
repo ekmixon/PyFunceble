@@ -81,10 +81,7 @@ class IanaDataset(DatasetBase):
         if value.startswith("."):
             value = value[1:]
 
-        if value in self:
-            return self.get_content()[value]
-
-        return None
+        return self.get_content()[value] if value in self else None
 
     def __getitem__(self, value: Any) -> Optional[str]:
         return self.__getattr__(value)
@@ -107,6 +104,4 @@ class IanaDataset(DatasetBase):
         Provides the WHOIS server of the given dataset.
         """
 
-        if self.is_extension(extension):
-            return self[extension]
-        return None
+        return self[extension] if self.is_extension(extension) else None

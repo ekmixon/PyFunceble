@@ -105,7 +105,7 @@ class TestCIDR2Subject(unittest.TestCase):
         """
 
         given = "127.0.30.0/28"
-        expected = [f"127.0.30.{x}" for x in range(0, 15 + 1)]
+        expected = [f"127.0.30.{x}" for x in range(15 + 1)]
 
         self.converter.data_to_convert = given
         actual = self.converter.get_converted()

@@ -440,11 +440,9 @@ class CollectionQueryTool:
                 }
             )
 
-        data = self.__push_status(
+        return self.__push_status(
             checker_status.checker_type.lower(), status_to_subject
         )
-
-        return data
 
     def guess_all_settings(
         self,

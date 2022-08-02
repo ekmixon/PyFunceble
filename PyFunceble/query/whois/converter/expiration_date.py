@@ -263,14 +263,10 @@ class ExpirationDateExtractor(ConverterBase):
         """
 
         for regex in self.PATTERNS:
-            expiration_date_line = RegexHelper(r"(?i)" + regex).match(
+            if expiration_date_line := RegexHelper(f"(?i){regex}").match(
                 self.data_to_convert, return_match=True, rematch=True, group=0
-            )
-
-            if not expiration_date_line:
-                continue
-
-            return expiration_date_line
+            ):
+                return expiration_date_line
         return None
 
     def __get_actual_expiration_date(
@@ -313,9 +309,7 @@ class ExpirationDateExtractor(ConverterBase):
         Provides the expiration date of the record (if found).
         """
 
-        expiration_date_line = self.__get_line()
-
-        if expiration_date_line:
+        if expiration_date_line := self.__get_line():
             expiration_date = expiration_date_line[0].strip()
 
             if RegexHelper(self.REGEX_DIGITS).match(

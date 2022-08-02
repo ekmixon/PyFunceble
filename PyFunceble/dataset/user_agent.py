@@ -79,10 +79,7 @@ class UserAgentDataset(DatasetBase):
         return value in self.get_content()
 
     def __getattr__(self, value: Any) -> dict:
-        if value in self:
-            return self.get_content()[value]
-
-        return dict()  # pylint: disable=use-dict-literal
+        return self.get_content()[value] if value in self else {}
 
     def __getitem__(self, value: Any) -> dict:
         return self.__getattr__(value)
@@ -129,7 +126,7 @@ class UserAgentDataset(DatasetBase):
                 f"{type(browser_short_name)} given."
             )
 
-        return bool(browser_short_name.lower() in self) and bool(
+        return browser_short_name.lower() in self and bool(
             self[browser_short_name.lower()]
         )
 
@@ -158,7 +155,7 @@ class UserAgentDataset(DatasetBase):
 
         return (
             self.is_supported_browser(browser_short_name)
-            and bool(platform.lower() in self[browser_short_name.lower()])
+            and platform.lower() in self[browser_short_name.lower()]
             and bool(self[browser_short_name.lower()][platform.lower()])
         )
 

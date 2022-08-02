@@ -99,8 +99,11 @@ class Month2Unified(ConverterBase):
             If no month is found, the given data is given as response.
         """
 
-        for to_return, possibilities in self.MAP.items():
-            if self.data_to_convert.lower() in possibilities:
-                return to_return
-
-        return self.data_to_convert
+        return next(
+            (
+                to_return
+                for to_return, possibilities in self.MAP.items()
+                if self.data_to_convert.lower() in possibilities
+            ),
+            self.data_to_convert,
+        )

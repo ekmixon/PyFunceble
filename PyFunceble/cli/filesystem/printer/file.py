@@ -184,14 +184,14 @@ class FilePrinter(PrinterBase):
         )
 
         line_to_print = self.get_line_to_print() + "\n"
-        without_header = ["hosts", "plain"]
-
         PyFunceble.facility.Logger.debug("Line to print: %r", line_to_print)
 
         if not self.file_helper.exists():
             self.file_helper.write(self.STD_FILE_GENERATION, overwrite=True)
             self.file_helper.write(self.get_generation_date_line())
             self.file_helper.write("\n\n")
+
+            without_header = ["hosts", "plain"]
 
             if self.template_to_use not in without_header:
                 self.file_helper.write(self.get_header_to_print())

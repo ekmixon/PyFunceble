@@ -248,7 +248,7 @@ class DNSQueryTool:
 
         return wrapper
 
-    def ignore_if_query_message_is_missing(func):  # pylint: disable=no-self-argument
+    def ignore_if_query_message_is_missing(func):    # pylint: disable=no-self-argument
         """
         Ignores the call to the decorated method if the query message is
         missing. Otherwise, return an empty list.
@@ -256,9 +256,7 @@ class DNSQueryTool:
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-            if self.query_message:
-                return func(self, *args, **kwargs)  # pylint: disable=not-callable
-            return []  # pragma: no cover ## Safety
+            return func(self, *args, **kwargs) if self.query_message else []
 
         return wrapper
 
@@ -520,10 +518,10 @@ class DNSQueryTool:
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.lookup.timeout:
-                self.query_timeout = PyFunceble.storage.CONFIGURATION.lookup.timeout
-            else:
-                self.query_timeout = self.STD_TIMEOUT
+            self.query_timeout = (
+                PyFunceble.storage.CONFIGURATION.lookup.timeout or self.STD_TIMEOUT
+            )
+
         else:
             self.query_timeout = self.STD_TIMEOUT
 
@@ -676,10 +674,7 @@ class DNSQueryTool:
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.dns.delay:
-                self.delay = PyFunceble.storage.CONFIGURATION.dns.delay
-            else:
-                self.delay = self.STD_DELAY
+            self.delay = PyFunceble.storage.CONFIGURATION.dns.delay or self.STD_DELAY
         else:
             self.delay = self.STD_DELAY
 
@@ -711,21 +706,19 @@ class DNSQueryTool:
 
     def _get_result_from_response(
         self, response: dns.message.Message
-    ) -> List[str]:  # pragma: no cover ## This just reads upstream result
+    ) -> List[str]:    # pragma: no cover ## This just reads upstream result
         """
         Given a response, we return the best possible result.
         """
 
         result = []
 
-        rrset = response.get_rrset(
+        if rrset := response.get_rrset(
             response.answer,
             self.dns_name,
             dns.rdataclass.RdataClass.IN,
             self.query_record_type,
-        )
-
-        if rrset:
+        ):
             result.extend([x.to_text() for x in rrset])
 
         PyFunceble.facility.Logger.debug("Result from response:\r%r", result)
@@ -785,9 +778,7 @@ class DNSQueryTool:
                     timeout=self.query_timeout,
                 )
 
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
+                if local_result := self._get_result_from_response(response):
                     result.extend(local_result)
 
                     self.lookup_record.nameserver = nameserver
@@ -857,9 +848,7 @@ class DNSQueryTool:
                     timeout=self.query_timeout,
                 )
 
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
+                if local_result := self._get_result_from_response(response):
                     result.extend(local_result)
 
                     self.lookup_record.nameserver = nameserver
@@ -924,9 +913,7 @@ class DNSQueryTool:
                     self.query_message, nameserver, timeout=self.query_timeout
                 )
 
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
+                if local_result := self._get_result_from_response(response):
                     result.extend(local_result)
 
                     self.lookup_record.nameserver = nameserver
@@ -1000,9 +987,7 @@ class DNSQueryTool:
                     timeout=self.query_timeout,
                 )
 
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
+                if local_result := self._get_result_from_response(response):
                     result.extend(local_result)
 
                     self.lookup_record.nameserver = nameserver

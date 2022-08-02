@@ -99,24 +99,24 @@ class Nameservers:
             The default port to apply, if none is found.
         """
 
-        if ":" in nameserver:
-            if nameserver.count(":") > 1:
-                if "]" not in nameserver:
-                    return nameserver, default_port
+        if ":" not in nameserver:
+            return nameserver, default_port
+        if nameserver.count(":") > 1:
+            if "]" not in nameserver:
+                return nameserver, default_port
 
-                nameserver, port = nameserver.split("]:", 1)
+            nameserver, port = nameserver.split("]:", 1)
 
-                if port.isdigit():
-                    return nameserver[1:], int(port)
-                return nameserver[1:], default_port
+            if port.isdigit():
+                return nameserver[1:], int(port)
+            return nameserver[1:], default_port
 
-            splitted = nameserver.rsplit(":")
+        splitted = nameserver.rsplit(":")
 
-            if splitted[-1].isdigit():
-                return ":".join(splitted[:-1]), int(splitted[-1])
+        if splitted[-1].isdigit():
+            return ":".join(splitted[:-1]), int(splitted[-1])
 
-            return ":".join(splitted[:-1]), default_port
-        return nameserver, default_port
+        return ":".join(splitted[:-1]), default_port
 
     @classmethod
     def get_ip_from_nameserver(cls, nameserver: str) -> List[str]:
@@ -196,11 +196,7 @@ class Nameservers:
                         nameserver
                     ).get_converted()
 
-                    if "/" in nameserver:
-                        path = nameserver[nameserver.find("/") :]
-                    else:
-                        path = ""
-
+                    path = nameserver[nameserver.find("/") :] if "/" in nameserver else ""
                     self.nameservers.append(
                         "https://"
                         # pylint: disable=line-too-long
@@ -210,14 +206,14 @@ class Nameservers:
                     self.nameservers.append(nameserver)
 
                 # 443 is because it's more likely to be for DOH.
-                self.nameserver_ports.update({self.nameservers[-1]: 443})
+                self.nameserver_ports[self.nameservers[-1]] = 443
                 continue
 
             server, port = self.split_nameserver_from_port(nameserver)
 
             for dns_ip in self.get_ip_from_nameserver(server):
                 self.nameservers.append(dns_ip)
-                self.nameserver_ports.update({dns_ip: port})
+                self.nameserver_ports[dns_ip] = port
 
         return self
 

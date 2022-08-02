@@ -91,7 +91,7 @@ class DBDatasetBase(DatasetBase):
         A method to be called (automatically) after __init__.
         """
 
-    def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
+    def execute_if_authorized(default: Any = None):    # pylint: disable=no-self-argument
         """
         Executes the decorated method only if we are authorized to process.
         Otherwise, apply the given :code:`default`.
@@ -100,9 +100,7 @@ class DBDatasetBase(DatasetBase):
         def inner_metdhod(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
-                if self.authorized:
-                    return func(self, *args, **kwargs)  # pylint: disable=not-callable
-                return default
+                return func(self, *args, **kwargs) if self.authorized else default
 
             return wrapper
 
@@ -182,7 +180,7 @@ class DBDatasetBase(DatasetBase):
 
         return self
 
-    @execute_if_authorized(dict())  # pylint: disable=use-dict-literal
+    @execute_if_authorized({})
     def get_filtered_row(self, row: dict) -> dict:
         """
         Removes all unkowns fields (not declared) from the given row.

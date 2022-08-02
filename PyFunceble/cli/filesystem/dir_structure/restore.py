@@ -73,10 +73,11 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
         data = DictHelper().from_json_file(self.source_file)
 
         if PlatformUtility.is_windows():
-            result = {}
+            result = {
+                os.path.normpath(directory): files
+                for directory, files in data.items()
+            }
 
-            for directory, files in data.items():
-                result[os.path.normpath(directory)] = files
 
             PyFunceble.facility.Logger.debug("Backup (read) data:\n%r", result)
 

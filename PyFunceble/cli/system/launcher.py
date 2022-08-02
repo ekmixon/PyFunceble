@@ -287,9 +287,11 @@ class SystemLauncher(SystemBase):
         Prints our ASCII home logo.
         """
 
-        if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
-            if PyFunceble.cli.utils.stdout.get_template_to_use() != "simple":
-                print(PyFunceble.cli.utils.ascii_logo.get_home_representation())
+        if (
+            not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+            and PyFunceble.cli.utils.stdout.get_template_to_use() != "simple"
+        ):
+            print(PyFunceble.cli.utils.ascii_logo.get_home_representation())
 
     @SystemBase.ensure_args_is_given
     def fill_protocol(self) -> "SystemLauncher":
@@ -342,14 +344,13 @@ class SystemLauncher(SystemBase):
         if self.args.files:
             for file in self.args.files:
                 # pylint: disable=line-too-long
-                if (
-                    not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
-                ):
-                    destination = get_destination_from_origin(file)
-                else:
-                    destination = get_destination_from_origin(
+                destination = (
+                    get_destination_from_origin(
                         PyFunceble.cli.storage.OUTPUTS.merged_directory
                     )
+                    if PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+                    else get_destination_from_origin(file)
+                )
 
                 to_append = {
                     "type": "file",
@@ -375,14 +376,13 @@ class SystemLauncher(SystemBase):
         if self.args.url_files:
             for file in self.args.url_files:
                 # pylint: disable=line-too-long
-                if (
-                    not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
-                ):
-                    destination = get_destination_from_origin(file)
-                else:
-                    destination = get_destination_from_origin(
+                destination = (
+                    get_destination_from_origin(
                         PyFunceble.cli.storage.OUTPUTS.merged_directory
                     )
+                    if PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+                    else get_destination_from_origin(file)
+                )
 
                 to_append = {
                     "type": "file",
@@ -660,78 +660,80 @@ class SystemLauncher(SystemBase):
             Generates the percentage file.
             """
 
-            if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
-                self.counter.set_parent_dirname(parent_dirname)
+            if PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
+                return
+            self.counter.set_parent_dirname(parent_dirname)
 
-                destination = os.path.join(
-                    self.counter.get_output_basedir(),
-                    PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
-                    PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
-                    PyFunceble.cli.storage.OUTPUTS.logs.filenames.percentage,
-                )
+            destination = os.path.join(
+                self.counter.get_output_basedir(),
+                PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+                PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
+                PyFunceble.cli.storage.OUTPUTS.logs.filenames.percentage,
+            )
 
-                stdout_header_printed = False
+            stdout_header_printed = False
 
-                self.stdout_printer.template_to_use = "percentage"
-                self.file_printer.template_to_use = "percentage"
-                self.file_printer.destination = destination
+            self.stdout_printer.template_to_use = "percentage"
+            self.file_printer.template_to_use = "percentage"
+            self.file_printer.destination = destination
 
-                for data in self.counter.get_dataset_for_printer():
-                    self.file_printer.set_dataset(data).print_interpolated_line()
+            for data in self.counter.get_dataset_for_printer():
+                self.file_printer.set_dataset(data).print_interpolated_line()
 
-                    # pylint: disable=line-too-long
-                    if (
-                        PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.percentage
-                        and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
-                    ):
-                        self.stdout_printer.dataset = data
+                # pylint: disable=line-too-long
+                if (
+                    PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.percentage
+                    and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                ):
+                    self.stdout_printer.dataset = data
 
-                        if not stdout_header_printed:
-                            self.stdout_printer.print_header()
-                            stdout_header_printed = True
+                    if not stdout_header_printed:
+                        self.stdout_printer.print_header()
+                        stdout_header_printed = True
 
-                        self.stdout_printer.print_interpolated_line()
+                    self.stdout_printer.print_interpolated_line()
 
         def generate_registrar_file(parent_dirname: str) -> None:
             """
             Generates the registrar file.
             """
 
-            if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
-                self.registrar_counter.set_parent_dirname(parent_dirname)
+            if PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
+                return
+            self.registrar_counter.set_parent_dirname(parent_dirname)
 
-                destination = os.path.join(
-                    self.counter.get_output_basedir(),
-                    PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
-                    PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
-                    PyFunceble.cli.storage.OUTPUTS.logs.filenames.registrar,
-                )
+            destination = os.path.join(
+                self.counter.get_output_basedir(),
+                PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+                PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
+                PyFunceble.cli.storage.OUTPUTS.logs.filenames.registrar,
+            )
 
-                stdout_header_printed = False
+            stdout_header_printed = False
 
-                self.stdout_printer.template_to_use = "registrar"
-                self.file_printer.template_to_use = "registrar"
-                self.file_printer.destination = destination
+            self.stdout_printer.template_to_use = "registrar"
+            self.file_printer.template_to_use = "registrar"
+            self.file_printer.destination = destination
 
-                registrar_limit = 0
-                for data in self.registrar_counter.get_dataset_for_printer():
-                    self.file_printer.set_dataset(data).print_interpolated_line()
+            registrar_limit = 0
+            for data in self.registrar_counter.get_dataset_for_printer():
+                self.file_printer.set_dataset(data).print_interpolated_line()
 
-                    # pylint: disable=line-too-long
-                    if (
-                        PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.registrar
-                        and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
-                        and registrar_limit
-                        < PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.max_registrar
-                    ):
-                        self.stdout_printer.dataset = data
+                # pylint: disable=line-too-long
+                if (
+                    PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.registrar
+                    and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                    and registrar_limit
+                    < PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.max_registrar
+                ):
+                    self.stdout_printer.dataset = data
 
-                        if not stdout_header_printed:
-                            self.stdout_printer.print_header()
-                            stdout_header_printed = True
+                    if not stdout_header_printed:
+                        self.stdout_printer.print_header()
+                        stdout_header_printed = True
 
-                        self.stdout_printer.print_interpolated_line()
-                        registrar_limit += 1
+                    self.stdout_printer.print_interpolated_line()
+                    registrar_limit += 1
 
         for protocol in self.testing_protocol:
             if not protocol["destination"]:

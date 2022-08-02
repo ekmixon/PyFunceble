@@ -168,11 +168,9 @@ class AdblockInputLine2Subject(ConverterBase):
 
         result = set()
 
-        rematch = self.__regex_helper.set_regex(r"((?:[^~\*,]+))").match(
+        if rematch := self.__regex_helper.set_regex(r"((?:[^~\*,]+))").match(
             decoded, rematch=True, return_match=True
-        )
-
-        if rematch:
+        ):
             result.update({self.extract_base(x) for x in rematch})
 
         return result
@@ -201,11 +199,9 @@ class AdblockInputLine2Subject(ConverterBase):
                 continue
 
             if "href" in rule:
-                matched = self.__regex_helper.set_regex(
+                if matched := self.__regex_helper.set_regex(
                     r"((?:\"|\')(.*)(?:\"|\'))"
-                ).match(rule, return_match=True, rematch=True, group=1)
-
-                if matched:
+                ).match(rule, return_match=True, rematch=True, group=1):
                     result.add(self.extract_base(matched))
                 continue
 
@@ -367,12 +363,14 @@ class AdblockInputLine2Subject(ConverterBase):
 
         separators = ["##", "#@#", "#?#"]
 
-        obj_of_interest, options = "", ""
-
-        for separator in separators:
-            if separator in local_line:
-                obj_of_interest, options = local_line.split(separator, 1)
-                break
+        obj_of_interest, options = next(
+            (
+                local_line.split(separator, 1)
+                for separator in separators
+                if separator in local_line
+            ),
+            ("", ""),
+        )
 
         result.update(self._decode_multiple_subject(obj_of_interest))
         result.update(self._decode_options(options.split(",")))

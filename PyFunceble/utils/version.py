@@ -232,7 +232,7 @@ class VersionUtility:
         return self.get_splitted(self.local_version)[-1].startswith(" ")
 
     @staticmethod
-    def is_cloned() -> bool:  # pragma: no cover ## Only used by 1 thing for dev.
+    def is_cloned() -> bool:    # pragma: no cover ## Only used by 1 thing for dev.
         """
         Checks if the local version is a cloned (from git) one.
         """
@@ -256,10 +256,8 @@ class VersionUtility:
         ]
         list_of_dirs = ["docs", "PyFunceble", "tests", ".github"]
 
-        if not all(file_helper.set_path(x).exists() for x in list_of_files):
-            return False
-
-        if not all(directory_helper.set_path(x).exists() for x in list_of_dirs):
-            return False
-
-        return True
+        return (
+            all((directory_helper.set_path(x).exists() for x in list_of_dirs))
+            if all(file_helper.set_path(x).exists() for x in list_of_files)
+            else False
+        )

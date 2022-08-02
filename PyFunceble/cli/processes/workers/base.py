@@ -284,9 +284,7 @@ class WorkerBase(multiprocessing.Process):
         # Be sure that all settings are loaded proprely!!
         PyFunceble.factory.Requester = PyFunceble.factory.requester()
 
-        wait_for_stop = (
-            bool(PyFunceble.storage.CONFIGURATION.cli_testing.mining) is True
-        )
+        wait_for_stop = bool(PyFunceble.storage.CONFIGURATION.cli_testing.mining)
         break_time = datetime.utcnow() + timedelta(seconds=self.MINING_WAIT_TIME)
 
         try:  # pylint: disable=too-many-nested-blocks

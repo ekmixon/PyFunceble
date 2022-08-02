@@ -262,13 +262,10 @@ class DownloaderBase:
         ):
             return False
 
-        if (
+        return (
             last_downloaded_time + datetime.timedelta(days=self.DOWNLOAD_FREQUENCY)
             <= datetime.datetime.utcnow()
-        ):
-            return True
-
-        return False
+        )
 
     def start(self) -> None:
         """

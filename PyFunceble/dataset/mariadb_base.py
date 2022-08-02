@@ -116,9 +116,7 @@ class MariaDBDatasetBase(DBDatasetBase):
         """
 
         for row in self.db_session.query(self.ORM_OBJ):
-            row = row.to_dict()
-
-            yield row
+            yield row.to_dict()
 
     @DBDatasetBase.execute_if_authorized(None)
     def update(self, row, *, ignore_if_exist: bool = False) -> "MariaDBDatasetBase":
@@ -154,13 +152,12 @@ class MariaDBDatasetBase(DBDatasetBase):
         else:
             existing_row_id = self.get_existing_row_id(row)
 
-            if existing_row_id is not None:
-                if not ignore_if_exist:
-                    row["id"] = existing_row_id
-                    self.update(row, ignore_if_exist=ignore_if_exist)
-            else:
+            if existing_row_id is None:
                 self.add(row)
 
+            elif not ignore_if_exist:
+                row["id"] = existing_row_id
+                self.update(row, ignore_if_exist=ignore_if_exist)
         PyFunceble.facility.Logger.debug("Updated row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to update row.")
 
@@ -245,9 +242,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         result = result.first()
 
-        if result is not None:
-            return result.id
-        return None
+        return result.id if result is not None else None
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given

@@ -117,14 +117,12 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         result = []
 
         for root, _, files in os.walk(directory):
-            if any(x in root for x in dirs_to_ignore):
-                continue
-
-            for file in files:
-                if file in files_to_ignore:
-                    continue
-
-                result.append(os.path.join(root, file))
+            if all(x not in root for x in dirs_to_ignore):
+                result.extend(
+                    os.path.join(root, file)
+                    for file in files
+                    if file not in files_to_ignore
+                )
 
         PyFunceble.facility.Logger.debug("List of files to sort:\n%r.", result)
 
@@ -150,11 +148,7 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         else:
             remove_duplicates = True
 
-        if "write_header" in consumed:
-            write_header = consumed["write_header"]
-        else:
-            write_header = True
-
+        write_header = consumed["write_header"] if "write_header" in consumed else True
         with concurrent.futures.ThreadPoolExecutor(
             max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
         ) as executor:

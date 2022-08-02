@@ -243,8 +243,9 @@ class CSVDatasetBase(DBDatasetBase):
         """
 
         if self.COMPARISON_FIELDS:
-            row = {x: y for x, y in row.items() if x in self.COMPARISON_FIELDS}
-            row.update({x: "" for x in self.COMPARISON_FIELDS if x not in row})
+            row = {x: y for x, y in row.items() if x in self.COMPARISON_FIELDS} | {
+                x: "" for x in self.COMPARISON_FIELDS if x not in row
+            }
 
             return row
 
@@ -265,11 +266,7 @@ class CSVDatasetBase(DBDatasetBase):
 
         row = self.get_filtered_comparision_row(row)
 
-        for read_row in self.get_content():
-            if self.are_equal(read_row, row):
-                return True
-
-        return False
+        return any(self.are_equal(read_row, row) for read_row in self.get_content())
 
     @DBDatasetBase.execute_if_authorized(False)
     def are_equal(self, read_row: dict, row: dict) -> bool:

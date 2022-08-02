@@ -520,16 +520,12 @@ class AvailabilityCheckerBase(CheckerBase):
             3. Above are False. Not allowed to continue to next test method.
         """
 
-        if not self.status.status:
-            return True
-
-        if (
+        return (
             status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
             and self.status.status == PyFunceble.storage.STATUS.invalid
-        ):
-            return True
-
-        return False
+            if self.status.status
+            else True
+        )
 
     def guess_and_set_use_extra_rules(self) -> "AvailabilityCheckerBase":
         """
@@ -699,11 +695,9 @@ class AvailabilityCheckerBase(CheckerBase):
 
         if lookup_order:
             for record_type in lookup_order:
-                local_result = self.dns_query_tool.set_query_record_type(
+                if local_result := self.dns_query_tool.set_query_record_type(
                     record_type
-                ).query()
-
-                if local_result:
+                ).query():
                     result[record_type] = local_result
 
                     break
@@ -822,9 +816,7 @@ class AvailabilityCheckerBase(CheckerBase):
             self.dns_query_tool.subject,
         )
 
-        lookup_result = self.query_dns_record()
-
-        if lookup_result:
+        if lookup_result := self.query_dns_record():
             self.status.dns_lookup = lookup_result
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "DNSLOOKUP"

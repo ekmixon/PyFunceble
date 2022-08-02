@@ -177,9 +177,7 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
         Removes the given marker from the given subject.
         """
 
-        if marker in subject:
-            return subject[: subject.find(marker)]
-        return subject
+        return subject[: subject.find(marker)] if marker in subject else subject
 
     @classmethod
     def get_matching_cleanup_marker(cls, subject: str) -> Optional[str]:
@@ -187,10 +185,10 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
         Checks if the given subject has a cleanup marker and provides it if found.
         """
 
-        for marker in cls.CLEANUP_MARKERS:
-            if subject.endswith(marker):
-                return marker
-        return None
+        return next(
+            (marker for marker in cls.CLEANUP_MARKERS if subject.endswith(marker)),
+            None,
+        )
 
     @classmethod
     def get_matching_ip_marker(cls, subject: str) -> Optional[str]:
@@ -198,10 +196,9 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
         Checks if the given subject has an IP marker and provides it if found.
         """
 
-        for marker in cls.IP_MARKERS:
-            if subject.endswith(marker):
-                return marker
-        return None
+        return next(
+            (marker for marker in cls.IP_MARKERS if subject.endswith(marker)), None
+        )
 
     @classmethod
     def get_subject_from_ip_marker(cls, subject: str, marker: str) -> str:
@@ -275,14 +272,10 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
                     subject = self.remove_marker(subject, f".{soa}")
                     subject = self.remove_marker(subject, soa)
 
-            found_cleanup_marker = self.get_matching_cleanup_marker(subject)
-
-            if found_cleanup_marker:
+            if found_cleanup_marker := self.get_matching_cleanup_marker(subject):
                 return self.remove_marker(subject, found_cleanup_marker)
 
-            found_ip_marker = self.get_matching_ip_marker(subject)
-
-            if found_ip_marker:
+            if found_ip_marker := self.get_matching_ip_marker(subject):
                 return self.get_subject_from_ip_marker(subject, found_ip_marker)
 
             return subject

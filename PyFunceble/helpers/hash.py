@@ -138,12 +138,8 @@ class HashHelper:
         digest = self.__get_hash()
 
         with FileHelper(file_path).open("rb") as file_stream:
-            block = file_stream.read(block_size)
-
-            while block:
+            while block := file_stream.read(block_size):
                 digest.update(block)
-                block = file_stream.read(block_size)
-
         return digest.finalize().hex()
 
     def hash_data(self, data: Union[str, bytes]) -> str:

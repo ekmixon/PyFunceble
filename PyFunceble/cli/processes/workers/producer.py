@@ -176,21 +176,19 @@ class ProducerWorker(WorkerBase):
             The rest result dataset.
         """
 
-        if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
-            # pylint: disable=line-too-long
+        if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
+            print_single_line()
 
-            if self.should_we_print_status_to_stdout(test_result.status):
-                self.stdout_printer.template_to_use = get_template_to_use()
+        elif self.should_we_print_status_to_stdout(test_result.status):
+            self.stdout_printer.template_to_use = get_template_to_use()
 
-                if not self.header_already_printed:
-                    self.stdout_printer.print_header()
-                    self.header_already_printed = True
+            if not self.header_already_printed:
+                self.stdout_printer.print_header()
+                self.header_already_printed = True
 
-                self.stdout_printer.set_dataset(
-                    test_result.to_dict()
-                ).print_interpolated_line()
-            else:
-                print_single_line()
+            self.stdout_printer.set_dataset(
+                test_result.to_dict()
+            ).print_interpolated_line()
         else:
             print_single_line()
 

@@ -907,7 +907,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         dns_query_patch.return_value = []
         given = "example.net"
-        expected = dict()  # pylint: disable=use-dict-literal
+        expected = {}
 
         self.checker.subject = given
 
@@ -977,7 +977,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         dns_query_patch.return_value = []
         given = "a1"
-        expected = dict()  # pylint: disable=use-dict-literal
+        expected = {}
 
         self.checker.subject = given
 
@@ -1043,9 +1043,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         # Let's test the case that no answer is given back.
         # pylint: disable=unnecessary-lambda
         self.checker.subject = "example.org"
-        self.checker.query_dns_record = (
-            lambda: dict()  # pylint: disable=use-dict-literal
-        )
+        self.checker.query_dns_record = lambda: {}
 
         self.checker.try_to_query_status_from_dns()
 

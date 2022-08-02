@@ -94,10 +94,7 @@ class RegexHelper:
         if not isinstance(value, str):
             raise TypeError(f"<value> should be {str}, {type(str)} given.")
 
-        if not self.escape_regex:
-            self._regex = value
-        else:
-            self._regex = re.escape(value)
+        self._regex = re.escape(value) if self.escape_regex else value
 
     def set_regex(self, value: str) -> "RegexHelper":
         """
@@ -159,11 +156,7 @@ class RegexHelper:
         result = []
         to_match = re.compile(self.regex)
 
-        if rematch:
-            pre_result = to_match.findall(data)
-        else:
-            pre_result = to_match.search(data)
-
+        pre_result = to_match.findall(data) if rematch else to_match.search(data)
         if return_match and pre_result:
             if rematch:
                 for res in pre_result:
@@ -179,9 +172,7 @@ class RegexHelper:
 
             return result
 
-        if not return_match and pre_result:
-            return True
-        return False
+        return bool(not return_match and pre_result)
 
     def replace_match(
         self,

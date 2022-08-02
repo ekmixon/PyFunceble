@@ -656,25 +656,28 @@ class StatusFileGenerator(FilesystemDirBase):
                     )
                 )
 
-        if self.test_dataset and "from_inactive" in self.test_dataset:
-            # Let's generate the supicious file :-)
-            if self.status.status in [
+        if (
+            self.test_dataset
+            and "from_inactive" in self.test_dataset
+            and self.status.status
+            in [
                 PyFunceble.storage.STATUS.up,
                 PyFunceble.storage.STATUS.valid,
                 PyFunceble.storage.STATUS.sane,
-            ]:
-                locations_data_and_template.append(
-                    (
-                        os.path.join(
-                            self.get_output_basedir(),
-                            PyFunceble.cli.storage.OUTPUTS.analytic.directories.parent,
-                            PyFunceble.cli.storage.OUTPUTS.analytic.directories.suspicious,
-                            PyFunceble.cli.storage.OUTPUTS.analytic.filenames.suspicious,
-                        ),
-                        "plain",
-                        self.status.to_dict(),
-                    )
+            ]
+        ):
+            locations_data_and_template.append(
+                (
+                    os.path.join(
+                        self.get_output_basedir(),
+                        PyFunceble.cli.storage.OUTPUTS.analytic.directories.parent,
+                        PyFunceble.cli.storage.OUTPUTS.analytic.directories.suspicious,
+                        PyFunceble.cli.storage.OUTPUTS.analytic.filenames.suspicious,
+                    ),
+                    "plain",
+                    self.status.to_dict(),
                 )
+            )
 
         for file_location, template, our_dataset in locations_data_and_template:
             self.file_printer.destination = file_location

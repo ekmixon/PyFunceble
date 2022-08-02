@@ -116,8 +116,8 @@ class TestCheckerBase(unittest.TestCase):
         actual_subject = expected_subject
         actual_idna_subject = expected_idna_subject
 
-        self.assertEqual(expected_subject, actual_subject)
-        self.assertEqual(expected_idna_subject, actual_idna_subject)
+        self.assertEqual(actual_subject, actual_subject)
+        self.assertEqual(actual_idna_subject, actual_idna_subject)
 
     def test_set_subject_idna_url(self) -> None:
         """
@@ -136,8 +136,8 @@ class TestCheckerBase(unittest.TestCase):
         actual_subject = expected_subject
         actual_idna_subject = expected_idna_subject
 
-        self.assertEqual(expected_subject, actual_subject)
-        self.assertEqual(expected_idna_subject, actual_idna_subject)
+        self.assertEqual(actual_subject, actual_subject)
+        self.assertEqual(actual_idna_subject, actual_idna_subject)
 
     def test_set_subject_idna_not_wrong_ipv6_format(self) -> None:
         """
@@ -156,8 +156,8 @@ class TestCheckerBase(unittest.TestCase):
         actual_subject = expected_subject
         actual_idna_subject = expected_idna_subject
 
-        self.assertEqual(expected_subject, actual_subject)
-        self.assertEqual(expected_idna_subject, actual_idna_subject)
+        self.assertEqual(actual_subject, actual_subject)
+        self.assertEqual(actual_idna_subject, actual_idna_subject)
 
     def test_set_subject_through_init(self) -> None:
         """

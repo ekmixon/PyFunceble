@@ -82,10 +82,7 @@ class PublicSuffixDataset(DatasetBase):
         if value.startswith("."):
             value = value[1:]
 
-        if value in self:
-            return self.get_content()[value]
-
-        return []
+        return self.get_content()[value] if value in self else []
 
     def __getitem__(self, value: Any) -> List[str]:
         return self.__getattr__(value)
@@ -108,6 +105,4 @@ class PublicSuffixDataset(DatasetBase):
         Provides the available suffix for the extension.
         """
 
-        if self.is_extension(extension):
-            return self[extension]
-        return []
+        return self[extension] if self.is_extension(extension) else []

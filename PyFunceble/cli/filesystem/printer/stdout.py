@@ -183,19 +183,22 @@ class StdoutPrinter(PrinterBase):
         if "status" in self.dataset:
             status_to_compare = self.dataset["status"]
 
-            if self.allow_coloration:
-                if self.template_to_use in self.BACKGROUND_COLORATED:
-                    print(
-                        f"{self.STATUS2BACKGROUND_COLOR[status_to_compare]}"
-                        f"{line_to_print}"
-                    )
-                elif self.template_to_use in self.FOREGROUND_COLORATED:
-                    print(
-                        f"{self.STATUS2FORGROUND_COLOR[status_to_compare]}"
-                        f"{line_to_print}"
-                    )
-                else:
-                    print(line_to_print)
+            if (
+                self.allow_coloration
+                and self.template_to_use in self.BACKGROUND_COLORATED
+            ):
+                print(
+                    f"{self.STATUS2BACKGROUND_COLOR[status_to_compare]}"
+                    f"{line_to_print}"
+                )
+            elif (
+                self.allow_coloration
+                and self.template_to_use in self.FOREGROUND_COLORATED
+            ):
+                print(
+                    f"{self.STATUS2FORGROUND_COLOR[status_to_compare]}"
+                    f"{line_to_print}"
+                )
             else:
                 print(line_to_print)
         elif self.template_to_use == "execution_time":

@@ -166,7 +166,7 @@ class TestPublicSuffixDataset(unittest.TestCase):
         for the case that the given extension does not exists.
         """
 
-        expected = list()  # pylint: disable=use-list-literal
+        expected = []
         actual = self.ps_dataset["hehehe"]
 
         self.assertEqual(expected, actual)
@@ -187,7 +187,7 @@ class TestPublicSuffixDataset(unittest.TestCase):
         for the case that the given extension does not exists.
         """
 
-        expected = list()  # pylint: disable=use-list-literal
+        expected = []
         actual = self.ps_dataset.hehehe
 
         self.assertEqual(expected, actual)
@@ -238,7 +238,7 @@ class TestPublicSuffixDataset(unittest.TestCase):
         for the case that the given extension is not known.
         """
 
-        expected = list()  # pylint: disable=use-list-literal
+        expected = []
         actual = self.ps_dataset.get_available_suffix("hehehehehe")
 
         self.assertEqual(expected, actual)

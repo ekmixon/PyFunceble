@@ -112,11 +112,7 @@ def get_timezone(
         The number of microseconds from UTC.
     """
 
-    if sign == "+":
-        sign = 1
-    else:  # pragma: no cover ## Not covered by default.
-        sign = -1
-
+    sign = 1 if sign == "+" else -1
     delta = timedelta(
         days=days,
         seconds=seconds,

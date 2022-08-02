@@ -262,7 +262,7 @@ class PrinterBase:
 
         ignore_header = ["simple", "hosts", "plain", "execution_time"]
 
-        to_print_data = [dict(), dict()]  # pylint: disable=use-dict-literal
+        to_print_data = [{}, {}]
 
         if self.template_to_use not in ignore_header:
             for key, value in self.HEADERS.items():
@@ -328,9 +328,7 @@ class PrinterBase:
         Prints the header.
         """
 
-        header = self.get_header_to_print()
-
-        if header:
+        if header := self.get_header_to_print():
             print(f"\n\n{header}")
 
     def print_interpolated_line(self) -> None:

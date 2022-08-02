@@ -163,10 +163,7 @@ class EnvironmentVariableHelper:
         :param default: The default value to return.
         """
 
-        if self.exists():
-            return os.environ[self.name]
-
-        return default
+        return os.environ[self.name] if self.exists() else default
 
     def get_value_from_env_file(
         self, *, default: Optional[Any] = None
@@ -178,9 +175,7 @@ class EnvironmentVariableHelper:
 
         read_value = dotenv.get_key(self.env_file_path, self.name)
 
-        if read_value is not None:
-            return read_value
-        return default
+        return read_value if read_value is not None else default
 
     def set_value(self, value: str) -> "EnvironmentVariableHelper":
         """

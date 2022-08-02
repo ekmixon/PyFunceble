@@ -103,11 +103,11 @@ class FilesystemCleanup(FilesystemDirBase):
         files_to_ignore = [".gitignore", ".keep", ".gitkeep"]
 
         for root, _, files in os.walk(self.get_output_basedir()):
-            for file in files:
-                if file in files_to_ignore:
-                    continue
-
-                result.append(os.path.join(root, file))
+            result.extend(
+                os.path.join(root, file)
+                for file in files
+                if file not in files_to_ignore
+            )
 
         return result
 

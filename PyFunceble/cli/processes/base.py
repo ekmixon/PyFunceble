@@ -122,37 +122,25 @@ class ProcessesManagerBase:
         output_queue_num: int = 1,
         output_workers_count: Optional[int] = None,
     ) -> None:
-        if manager is not None:
-            self.manager = manager
-        else:
-            self.manager = multiprocessing.Manager()
-
+        self.manager = manager if manager is not None else multiprocessing.Manager()
         if input_queue is None:
-            if generate_input_queue:
-                self.input_queue = self.manager.Queue()
-            else:
-                self.input_queue = None
+            self.input_queue = self.manager.Queue() if generate_input_queue else None
         else:
             self.input_queue = input_queue
 
         if output_queue is None:
-            if generate_output_queue:
-                self.output_queue = [
-                    self.manager.Queue() for _ in range(output_queue_num)
-                ]
-            else:
-                self.output_queue = None
-        else:
-            if not isinstance(output_queue, list):
-                self.output_queue = [output_queue]
-            else:
-                self.output_queue = output_queue
+            self.output_queue = (
+                [self.manager.Queue() for _ in range(output_queue_num)]
+                if generate_output_queue
+                else None
+            )
 
-        if max_worker is not None:
-            self.max_worker = max_worker
+        elif not isinstance(output_queue, list):
+            self.output_queue = [output_queue]
         else:
-            self.max_worker = self.STD_MAX_WORKER
+            self.output_queue = output_queue
 
+        self.max_worker = max_worker if max_worker is not None else self.STD_MAX_WORKER
         if continuous_integration is not None:
             self.continuous_integration = continuous_integration
 
@@ -168,7 +156,7 @@ class ProcessesManagerBase:
         else:
             self._output_workers_count = int(output_workers_count)
 
-    def ensure_worker_obj_is_given(func):  # pylint: disable=no-self-argument
+    def ensure_worker_obj_is_given(func):    # pylint: disable=no-self-argument
         """
         Ensures that the worker is properly declared before launching the
         decorated method.
@@ -177,7 +165,7 @@ class ProcessesManagerBase:
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
             if self.WORKER_OBJ is None:
-                raise TypeError(f"<self.WORKER_OBJ> should not be {None}!")
+                raise TypeError('<self.WORKER_OBJ> should not be None!')
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
@@ -199,7 +187,7 @@ class ProcessesManagerBase:
 
         return wrapper
 
-    def ignore_if_running(func):  # pylint: disable=no-self-argument
+    def ignore_if_running(func):    # pylint: disable=no-self-argument
         """
         Ignore the launching of the decorated method if the workers are
         running.
@@ -207,10 +195,7 @@ class ProcessesManagerBase:
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-            if not self.is_running():
-                return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-            return self
+            return self if self.is_running() else func(self, *args, **kwargs)
 
         return wrapper
 
@@ -261,14 +246,11 @@ class ProcessesManagerBase:
         Checks if a worker is running.
         """
 
-        if not self._running_workers:
-            return False
-
-        for worker in self._running_workers:
-            if worker.is_alive():
-                return True
-
-        return False
+        return (
+            any(worker.is_alive() for worker in self._running_workers)
+            if self._running_workers
+            else False
+        )
 
     def send_stop_signal(
         self, *, worker_name: Optional[str] = None
@@ -287,11 +269,7 @@ class ProcessesManagerBase:
         queues - which are implicitly dependend of this process "pool".
         """
 
-        if self._running_workers:
-            workers = self._running_workers
-        else:
-            workers = self._created_workers
-
+        workers = self._running_workers or self._created_workers
         if workers[0].global_exit_event:
             workers[0].global_exit_event.set()
 
@@ -349,11 +327,7 @@ class ProcessesManagerBase:
             Authorizes the addition of the destination into the message.
         """
 
-        if self.is_running():
-            workers = self._running_workers
-        else:
-            workers = self._created_workers
-
+        workers = self._running_workers if self.is_running() else self._created_workers
         for worker in workers:
             if include_destination:
                 worker.add_to_input_queue(

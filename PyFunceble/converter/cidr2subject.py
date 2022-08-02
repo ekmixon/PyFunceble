@@ -92,9 +92,7 @@ class CIDR2Subject(ConverterBase):
 
         result = set()
 
-        subject = self.data_to_convert.strip()
-
-        if subject:
+        if subject := self.data_to_convert.strip():
             try:
                 self.ip_syntax_checker.set_subject(subject)
                 if self.ip_syntax_checker.is_valid_v4_range():

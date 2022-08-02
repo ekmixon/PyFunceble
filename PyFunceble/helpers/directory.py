@@ -116,9 +116,7 @@ class DirectoryHelper:
             Add a directory separator at the end.
         """
 
-        if with_end_sep:
-            return os.getcwd() + os.sep
-        return os.getcwd()
+        return os.getcwd() + os.sep if with_end_sep else os.getcwd()
 
     @property
     def realpath(self) -> str:
@@ -175,9 +173,7 @@ class DirectoryHelper:
 
         if self.exists():
             for root, directories, _ in os.walk(self.path):
-                for directory in directories:
-                    result.append(os.path.join(root, directory))
-
+                result.extend(os.path.join(root, directory) for directory in directories)
         return ListHelper(result).remove_duplicates().sort().subject
 
     def list_all_files(self) -> List[str]:

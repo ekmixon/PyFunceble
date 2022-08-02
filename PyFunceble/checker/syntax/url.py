@@ -81,14 +81,10 @@ class URLSyntaxChecker(SyntaxCheckerBase):
         if not parsed.scheme or not parsed.netloc:
             return None
 
-        if parsed.hostname:
-            if parsed.hostname != parsed.netloc:
-                hostname = parsed.hostname
-            else:
-                hostname = parsed.netloc
-        else:  ## pragma: no cover ## Safety check.
+        if parsed.hostname and parsed.hostname != parsed.netloc:
+            hostname = parsed.hostname
+        else:
             hostname = parsed.netloc
-
         return hostname
 
     @CheckerBase.ensure_subject_is_given
@@ -105,13 +101,13 @@ class URLSyntaxChecker(SyntaxCheckerBase):
 
         hostname = self.get_hostname_from_url(self.idna_subject)
 
-        if not hostname:
-            return False
-
-        if (
-            DomainSyntaxChecker(hostname).is_valid()
-            or IPSyntaxChecker(hostname).is_valid()
-        ):
-            return True
-
-        return False
+        return (
+            bool(
+                (
+                    DomainSyntaxChecker(hostname).is_valid()
+                    or IPSyntaxChecker(hostname).is_valid()
+                )
+            )
+            if hostname
+            else False
+        )

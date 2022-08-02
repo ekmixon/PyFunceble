@@ -241,14 +241,8 @@ class CredentialLoader:
             f"(Default: {default!r}): "
         )
 
-        if var_name == "password":
-            user_input = getpass(message)
-        else:
-            user_input = input(message)
-
-        if user_input:
-            return user_input
-        return default
+        user_input = getpass(message) if var_name == "password" else input(message)
+        return user_input or default
 
     @execute_if_authorized(None)
     @ensure_db_type_is_given
@@ -277,9 +271,7 @@ class CredentialLoader:
                 if env_var_helper.set_name(env_var).exists():
                     self.set_credential_var(cred_var, env_var_helper.get_value())
                 else:
-                    from_file = env_var_helper.get_value_from_env_file()
-
-                    if from_file:
+                    if from_file := env_var_helper.get_value_from_env_file():
                         self.set_credential_var(cred_var, from_file)
                     elif not ignore_cli:
                         self.set_credential_var(

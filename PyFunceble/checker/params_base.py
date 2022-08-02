@@ -72,7 +72,7 @@ class CheckerParamsBase:
         """
 
         return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
+            x: y.to_dict() if hasattr(y, "to_dict") else y
             for x, y in self.__dict__.items()
             if not x.startswith("__")
         }

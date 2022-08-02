@@ -261,7 +261,7 @@ class ConfigLoader:
 
     def install_missing_infrastructure_files(
         self,
-    ) -> "ConfigLoader":  # pragma: no cover ## Copy method already tested
+    ) -> "ConfigLoader":    # pragma: no cover ## Copy method already tested
         """
         Installs the missing files (when needed).
 
@@ -271,11 +271,13 @@ class ConfigLoader:
                 - The directory structure file.
         """
 
-        if not self.is_already_loaded():
-            if not self.file_helper.set_path(self.path_to_config).exists():
-                self.file_helper.set_path(self.path_to_default_config).copy(
-                    self.path_to_config
-                )
+        if (
+            not self.is_already_loaded()
+            and not self.file_helper.set_path(self.path_to_config).exists()
+        ):
+            self.file_helper.set_path(self.path_to_default_config).copy(
+                self.path_to_config
+            )
 
         return self
 

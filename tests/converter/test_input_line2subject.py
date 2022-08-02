@@ -105,7 +105,7 @@ class TestInputLine2Subject(unittest.TestCase):
         """
 
         given = "# example.org"
-        expected = list()  # pylint: disable=use-list-literal
+        expected = []
 
         self.converter.data_to_convert = given
         actual = self.converter.get_converted()

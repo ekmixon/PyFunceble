@@ -88,9 +88,7 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
 
         broken = False
 
-        for row in self.db_session.query(WhoisRecord).filter(
-            WhoisRecord.idna_subject == None
-        ):
+        for row in self.db_session.query(WhoisRecord).filter(WhoisRecord.idna_subject is None):
             if (
                 self.continuous_integration
                 and self.continuous_integration.is_time_exceeded()

@@ -123,13 +123,10 @@ class Logger:
         output_dir: Optional[str] = None,
     ) -> None:
 
-        if output_dir:
-            self.output_directory = output_dir
-        else:
-            self.output_directory = os.path.join(
-                PyFunceble.cli.storage.OUTPUT_DIRECTORY,
-                PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
-            )
+        self.output_directory = output_dir or os.path.join(
+            PyFunceble.cli.storage.OUTPUT_DIRECTORY,
+            PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+        )
 
         if activated is not None:
             self.activated = activated

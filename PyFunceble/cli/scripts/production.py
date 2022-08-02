@@ -193,11 +193,10 @@ class ProductionPrep:
             self.version_utility.local_version
         )[0]
 
-        for index, version_part in enumerate(splitted[:2]):
-            if int(version_part) < int(local_splitted[index]):
-                return True
-
-        return False
+        return any(
+            int(version_part) < int(local_splitted[index])
+            for index, version_part in enumerate(splitted[:2])
+        )
 
     @ensure_branch_is_given
     def update_urls(self, file: str) -> "ProductionPrep":
@@ -213,39 +212,47 @@ class ProductionPrep:
 
         if self.branch == "dev":
             regexes = [
-                (r"PyFunceble\/%s\/" % "master", "PyFunceble/%s/" % "dev"),
-                ("=%s" % "master", "=%s" % "dev"),
-                (r"/{1,}en\/%s" % "latest", "/en/%s" % "dev"),
-                (r"\/pyfunceble-dev.png", "/pyfunceble-%s.png" % "dev"),
-                (r"\/project\/pyfunceble$", "/project/pyfunceble-%s" % "dev"),
+                (r"PyFunceble\/%s\/" % "master", 'PyFunceble/dev/'),
+                ('=master', '=dev'),
+                (r"/{1,}en\/%s" % "latest", '/en/dev'),
+                (r"\/pyfunceble-dev.png", '/pyfunceble-dev.png'),
+                (r"\/project\/pyfunceble$", '/project/pyfunceble-dev'),
                 (
                     r"\/badge\/pyfunceble(/month|/week|)$",
                     "/badge/pyfunceble-%s\\1" % "dev",
                 ),
-                (r"\/blob\/%s\/" % "master", "/blob/%s/" % "dev"),
-                (r"\/pypi\/v\/pyfunceble\.png$", "/pypi/v/pyfunceble-%s.png" % "dev"),
-                (r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "master", "/\\1/%s/" % "dev"),
+                (r"\/blob\/%s\/" % "master", '/blob/dev/'),
+                (r"\/pypi\/v\/pyfunceble\.png$", '/pypi/v/pyfunceble-dev.png'),
+                (
+                    r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "master",
+                    "/\\1/%s/" % "dev",
+                ),
                 (r"\/(PyFunceble\/tree)\/%s" % "master", "/\\1/%s" % "dev"),
             ]
+
         elif self.branch == "master":
             regexes = [
-                (r"PyFunceble\/%s\/" % "dev", "PyFunceble/%s/" % "master"),
-                ("=%s" % "dev", "=%s" % "master"),
-                (r"/{1,}en\/%s" % "dev", "/en/%s" % "latest"),
+                (r"PyFunceble\/%s\/" % "dev", 'PyFunceble/master/'),
+                ('=dev', '=master'),
+                (r"/{1,}en\/%s" % "dev", '/en/latest'),
                 (r"\/pyfunceble-dev.png", "/pyfunceble-dev.png"),
                 (r"\/project\/pyfunceble-%s$" % "dev", "/project/pyfunceble"),
                 (
                     r"\/badge\/pyfunceble-%s(/month|/week|)$" % "dev",
                     "/badge/pyfunceble\\1",
                 ),
-                (r"\/blob\/%s\/" % "dev", "/blob/%s/" % "master"),
+                (r"\/blob\/%s\/" % "dev", '/blob/master/'),
                 (
                     r"\/pypi\/v\/pyfunceble-%s\.png$" % "dev",
                     "/pypi/v/pyfunceble.png",
                 ),
-                (r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "dev", "/\\1/%s/" % "master"),
+                (
+                    r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "dev",
+                    "/\\1/%s/" % "master",
+                ),
                 (r"\/(PyFunceble\/tree)\/%s" % "dev", "/\\1/%s" % "master"),
             ]
+
         else:
             regexes = {}
 
@@ -293,10 +300,8 @@ class ProductionPrep:
 
                 full_path = os.path.join(root, file)
 
-                if any(x in full_path for x in to_ignore):
-                    continue
-
-                self.update_urls(os.path.join(root, file))
+                if all(x not in full_path for x in to_ignore):
+                    self.update_urls(os.path.join(root, file))
 
     @staticmethod
     def update_code_format() -> "ProductionPrep":

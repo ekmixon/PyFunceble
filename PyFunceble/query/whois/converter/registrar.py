@@ -102,14 +102,10 @@ class RegistarExtractor(ConverterBase):
         """
 
         for regex in self.PATTERNS:
-            registrar_line = RegexHelper(r"(?i)" + regex).match(
+            if registrar_line := RegexHelper(f"(?i){regex}").match(
                 self.data_to_convert, return_match=True, rematch=True, group=0
-            )
-
-            if not registrar_line:
-                continue
-
-            return registrar_line
+            ):
+                return registrar_line
         return None
 
     @ConverterBase.ensure_data_to_convert_is_given
@@ -118,9 +114,7 @@ class RegistarExtractor(ConverterBase):
         Provides the registrar of the record (if found).
         """
 
-        registrar_line = self.__get_line()
-
-        if registrar_line:
+        if registrar_line := self.__get_line():
             try:
                 return [x.strip() for x in registrar_line if x.strip()][0]
             except IndexError:

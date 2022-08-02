@@ -78,16 +78,17 @@ def colorify(color: str) -> str:
         raise ValueError(f"<color> ({color!r}) is not supported.")
 
     color_to_apply = getattr(colorama.Fore, color)
-    result = []
-
     to_color = PyFunceble.cli.storage.ASCII_PYFUNCEBLE
 
     if (
         PyFunceble.facility.ConfigLoader.is_already_loaded()
         and PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour
     ):
-        for line in to_color.split("\n"):
-            result.append(f"{color_to_apply}{line}{colorama.Fore.RESET}")
+        result = [
+            f"{color_to_apply}{line}{colorama.Fore.RESET}"
+            for line in to_color.split("\n")
+        ]
+
 
         return "\n".join(result)
     return to_color

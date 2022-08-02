@@ -111,36 +111,12 @@ class CredentialBase:
         charset: Optional[str] = None,
     ) -> None:
 
-        if host is not None:
-            self.host = host
-        else:
-            self.host = self.STD_HOST
-
-        if port is not None:
-            self.port = port
-        else:
-            self.port = self.STD_PORT
-
-        if name is not None:
-            self.name = name
-        else:
-            self.name = self.STD_NAME
-
-        if username is not None:
-            self.username = username
-        else:
-            self.username = self.STD_USERNAME
-
-        if password is not None:
-            self.password = password
-        else:
-            self.password = self.STD_PASSWORD
-
-        if charset is not None:
-            self.charset = charset
-        else:
-            self.charset = self.STD_CHARSET
-
+        self.host = host if host is not None else self.STD_HOST
+        self.port = port if port is not None else self.STD_PORT
+        self.name = name if name is not None else self.STD_NAME
+        self.username = username if username is not None else self.STD_USERNAME
+        self.password = password if password is not None else self.STD_PASSWORD
+        self.charset = charset if charset is not None else self.STD_CHARSET
         self.dotenv_locations = [
             os.path.realpath(PyFunceble.storage.ENV_FILENAME),
             os.path.join(

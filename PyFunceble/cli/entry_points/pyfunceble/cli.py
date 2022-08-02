@@ -226,7 +226,8 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.cidr_expand",
                 "action": "store_true",
                 "help": "Activates or disables the expansion of CIDR formatted\n"
-                "addresses. %s" % get_configured_value("cli_testing.cidr_expand"),
+                "addresses. %s"
+                % get_configured_value("cli_testing.cidr_expand"),
             },
         ),
         (
@@ -255,7 +256,8 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
                 "This reduces the waiting time while continuing a previous\n"
                 "session.\n"
                 "Note: This is useless when the auto continue subsystem is not "
-                "active. %s" % get_configured_value("cli_testing.preload_file"),
+                "active. %s"
+                % get_configured_value("cli_testing.preload_file"),
             },
         ),
         (
@@ -265,8 +267,7 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.file_filter",
                 "type": str,
-                "help": "Regex to match in order to test a given line. %s"
-                % get_configured_value("cli_testing.file_filter"),
+                "help": f'Regex to match in order to test a given line. {get_configured_value("cli_testing.file_filter")}',
             },
         ),
         (
@@ -276,8 +277,7 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.mining",
                 "action": "store_true",
-                "help": "Activates or disables the mining subsystem. %s"
-                % get_configured_value("cli_testing.mining"),
+                "help": f'Activates or disables the mining subsystem. {get_configured_value("cli_testing.mining")}',
             },
         ),
         (
@@ -343,8 +343,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.autocontinue",
                 "action": "store_true",
-                "help": "Activates or disables the autocontinue subsystem. %s"
-                % get_configured_value("cli_testing.autocontinue"),
+                "help": f'Activates or disables the autocontinue subsystem. {get_configured_value("cli_testing.autocontinue")}',
             },
         ),
         (
@@ -355,7 +354,8 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.cooldown_time",
                 "type": float,
                 "help": "Sets the cooldown time (in second) to apply between\n"
-                "each test. %s" % get_configured_value("cli_testing.cooldown_time"),
+                "each test. %s"
+                % get_configured_value("cli_testing.cooldown_time"),
             },
         ),
         (
@@ -376,8 +376,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "collection.preferred_status_origin",
                 "type": str,
                 "choices": ["frequent", "latest", "recommended"],
-                "help": "Sets the preferred status origin. %s"
-                % get_configured_value("collection.preferred_status_origin"),
+                "help": f'Sets the preferred status origin. {get_configured_value("collection.preferred_status_origin")}',
             },
         ),
         (
@@ -386,7 +385,8 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "lookup.collection",
                 "action": "store_true",
                 "help": "Activates or disables the usage of the Collection lookup\n"
-                "whether possible. %s" % get_configured_value("lookup.collection"),
+                "whether possible. %s"
+                % get_configured_value("lookup.collection"),
             },
         ),
         (
@@ -419,8 +419,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "lookup.http_status_code",
                 "action": "store_true",
-                "help": "Switch the value of the usage of HTTP code. %s"
-                % get_configured_value("lookup.http_status_code"),
+                "help": f'Switch the value of the usage of HTTP code. {get_configured_value("lookup.http_status_code")}',
             },
         ),
         (
@@ -519,8 +518,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.testing_mode.reputation",
                 "action": "store_true",
-                "help": "Activates or disables the reputation checker. %s"
-                % get_configured_value("cli_testing.testing_mode.reputation"),
+                "help": f'Activates or disables the reputation checker. {get_configured_value("cli_testing.testing_mode.reputation")}',
             },
         ),
         (
@@ -530,8 +528,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.testing_mode.syntax",
                 "action": "store_true",
-                "help": "Activates or disables the syntax checker. %s"
-                % get_configured_value("cli_testing.testing_mode.syntax"),
+                "help": f'Activates or disables the syntax checker. {get_configured_value("cli_testing.testing_mode.syntax")}',
             },
         ),
         (
@@ -618,8 +615,7 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "dns.protocol",
                 "type": str,
                 "choices": ["UDP", "TCP", "HTTPS", "TLS"],
-                "help": "Sets the protocol to use for the DNS queries. %s"
-                % get_configured_value("dns.protocol"),
+                "help": f'Sets the protocol to use for the DNS queries. {get_configured_value("dns.protocol")}',
             },
         ),
         (
@@ -673,8 +669,7 @@ def get_proxy_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "proxy.global.http",
                 "type": str,
-                "help": "Sets the proxy to use when testing subjects over HTTP. %s"
-                % get_configured_value("proxy.global.http"),
+                "help": f'Sets the proxy to use when testing subjects over HTTP. {get_configured_value("proxy.global.http")}',
             },
         ),
         (
@@ -684,8 +679,7 @@ def get_proxy_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "proxy.global.https",
                 "type": str,
-                "help": "Sets the proxy to use when testing subjects over HTTPS. %s"
-                % get_configured_value("proxy.global.https"),
+                "help": f'Sets the proxy to use when testing subjects over HTTPS. {get_configured_value("proxy.global.https")}',
             },
         ),
     ]
@@ -792,8 +786,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.display_mode.execution_time",
                 "action": "store_true",
-                "help": "Activates or disables the display of the execution time. %s"
-                % get_configured_value("cli_testing.display_mode.execution_time"),
+                "help": f'Activates or disables the display of the execution time. {get_configured_value("cli_testing.display_mode.execution_time")}',
             },
         ),
         (
@@ -801,8 +794,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.display_mode.colour",
                 "action": "store_true",
-                "help": "Activates or disables the coloration to STDOUT. %s"
-                % get_configured_value("cli_testing.display_mode.colour"),
+                "help": f'Activates or disables the coloration to STDOUT. {get_configured_value("cli_testing.display_mode.colour")}',
             },
         ),
         (
@@ -839,7 +831,9 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "action": "store_true",
                 "help": "Activates or disables the sorting of the files\n"
                 "content (output) in a hierarchical order. %s"
-                % get_configured_value("cli_testing.sorting_mode.hierarchical"),
+                % get_configured_value(
+                    "cli_testing.sorting_mode.hierarchical"
+                ),
             },
         ),
         (
@@ -860,8 +854,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.hosts_ip",
                 "type": str,
-                "help": "Sets the IP to prefix each lines of the hosts file. %s"
-                % get_configured_value("cli_testing.hosts_ip"),
+                "help": f'Sets the IP to prefix each lines of the hosts file. {get_configured_value("cli_testing.hosts_ip")}',
             },
         ),
         (
@@ -874,7 +867,9 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the merging of the outputs of all\n"
                 "inputted files inside a single subdirectory as opposed to the\n"
                 "normal behavior. %s"
-                % get_configured_value("cli_testing.file_generation.merge_output_dirs"),
+                % get_configured_value(
+                    "cli_testing.file_generation.merge_output_dirs"
+                ),
             },
         ),
         (
@@ -954,7 +949,9 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "argument is not set. This argument only takes effect on\n"
                 "display but not\n"
                 "in the log file %s"
-                % get_configured_value("cli_testing.display_mode.max_registrar"),
+                % get_configured_value(
+                    "cli_testing.display_mode.max_registrar"
+                ),
             },
         ),
         (
@@ -979,7 +976,8 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.display_mode.quiet",
                 "action": "store_true",
                 "help": "Activates or disables the display of output to the\n"
-                "terminal. %s" % get_configured_value("cli_testing.display_mode.quiet"),
+                "terminal. %s"
+                % get_configured_value("cli_testing.display_mode.quiet"),
             },
         ),
         (
@@ -1011,8 +1009,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.display_mode.simple",
                 "action": "store_true",
-                "help": "Activates or disables the simple output mode. %s"
-                % get_configured_value("cli_testing.display_mode.simple"),
+                "help": f'Activates or disables the simple output mode. {get_configured_value("cli_testing.display_mode.simple")}',
             },
         ),
     ]
@@ -1023,9 +1020,7 @@ def get_multiprocessing_group_data() -> List[Tuple[List[str], dict]]:
     Provides the argument of the multiprocessing group data.
     """
 
-    available_cpu = os.cpu_count()
-
-    if available_cpu:
+    if available_cpu := os.cpu_count():
         default_max_workers = available_cpu * 5
     else:
         default_max_workers = 1
@@ -1070,7 +1065,8 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.ci.active",
                 "action": "store_true",
                 "help": "Activates or disables the Continuous Integration\n"
-                "mechanism. %s" % get_configured_value("cli_testing.ci.active"),
+                "mechanism. %s"
+                % get_configured_value("cli_testing.ci.active"),
             },
         ),
         (
@@ -1110,8 +1106,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.ci.end_command",
                 "type": str,
-                "help": "Sets the command to execute before the final commit. %s"
-                % get_configured_value("cli_testing.ci.end_command"),
+                "help": f'Sets the command to execute before the final commit. {get_configured_value("cli_testing.ci.end_command")}',
             },
         ),
         (
@@ -1131,8 +1126,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.ci.end_commit_message",
                 "type": str,
-                "help": "Sets the commit message to apply at the really end. %s"
-                % get_configured_value("cli_testing.ci.end_commit_message"),
+                "help": f'Sets the commit message to apply at the really end. {get_configured_value("cli_testing.ci.end_commit_message")}',
             },
         ),
     ]
@@ -1178,7 +1172,7 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "action": "version",
                 "help": "Show the version of PyFunceble and exit.",
-                "version": "%(prog)s " + PyFunceble.storage.PROJECT_VERSION,
+                "version": f"%(prog)s {PyFunceble.storage.PROJECT_VERSION}",
             },
         ),
     ]
@@ -1217,10 +1211,7 @@ def ask_authorization_to_merge_config(missing_key: Optional[str] = None) -> bool
         if response[0] not in ("y", "n"):
             continue
 
-        if response[0] == "y":
-            return True
-
-        return False
+        return response[0] == "y"
 
 
 def tool() -> None:

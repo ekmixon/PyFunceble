@@ -439,13 +439,13 @@ class TestConfigLoader(unittest.TestCase):
 
         self.assertIsInstance(response, ConfigLoader)
 
-        expected_custom = dict()  # pylint: disable=use-dict-literal
+        expected_custom = {}
         actual = self.config_loader.custom_config
 
         self.assertEqual(expected_custom, actual)
 
         expected_indexes = ["http_codes", "links"]
-        expected = dict()  # pylint: disable=use-dict-literal
+        expected = {}
 
         for index in expected_indexes:
             actual = getattr(PyFunceble.storage, index.upper())

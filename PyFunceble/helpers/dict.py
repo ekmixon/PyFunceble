@@ -129,9 +129,7 @@ class DictHelper:
                     result.append(True)
             else:
                 result.append(False)
-        if loop:
-            return result
-        return False not in result
+        return result if loop else False not in result
 
     def remove_key(
         self, key_to_remove: Union[str, List[str]]
@@ -177,11 +175,12 @@ class DictHelper:
                     if old in self.subject:
                         self.subject[new] = self.subject.pop(old)
                 else:
-                    to_rename = {}
+                    to_rename = {
+                        index: new[:-1] + index.split(old)[-1]
+                        for index in self.subject
+                        if old in index
+                    }
 
-                    for index in self.subject:
-                        if old in index:
-                            to_rename.update({index: new[:-1] + index.split(old)[-1]})
 
                     self.subject = DictHelper(self.subject).rename_key(to_rename, True)
         return self.subject
@@ -233,7 +232,7 @@ class DictHelper:
         try:
             return loads(FileHelper(path=file_path).read(encoding=encoding))
         except (decoder.JSONDecodeError, TypeError):
-            return None if not return_dict_on_error else {}
+            return {} if return_dict_on_error else None
 
     def to_json(
         self,
@@ -274,7 +273,7 @@ class DictHelper:
         try:
             return loads(json_str)
         except (decoder.JSONDecodeError, TypeError):
-            return None if not return_dict_on_error else {}
+            return {} if return_dict_on_error else None
 
     @staticmethod
     def from_yaml_file(
@@ -391,15 +390,14 @@ class DictHelper:
                 for yek, eulav in (
                     DictHelper(value).flatten(separator=separator, previous=key).items()
                 ):
-                    if previous is not None:
-                        result[f"{previous}{separator}{yek}"] = eulav
-                    else:
+                    if previous is None:
                         result[yek] = eulav
+                    else:
+                        result[f"{previous}{separator}{yek}"] = eulav
+        elif previous:
+            result[previous] = data
         else:
-            if previous:
-                result[previous] = data
-            else:
-                result[separator] = data
+            result[separator] = data
 
         return result
 

@@ -201,7 +201,7 @@ class TestUserAgentDataset(unittest.TestCase):
         """
 
         given = "vivaldi"
-        expected = dict()  # pylint: disable=use-dict-literal
+        expected = {}
 
         actual = self.user_agent_dataset[given]
 

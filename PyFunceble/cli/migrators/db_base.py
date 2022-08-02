@@ -118,9 +118,7 @@ class DBMigratorBase(MigratorBase):
 
         result = dict(result.fetchone())
 
-        if result["COUNT(*)"] != 1:
-            return False
-        return True
+        return result["COUNT(*)"] == 1
 
     def start(self) -> "MigratorBase":
         """
